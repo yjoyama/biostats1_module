@@ -6,18 +6,67 @@ output: github_document
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = F)
+knitr::opts_chunk$set(echo = T)
 ```
 
 # Module 1
-## Import data
-
-```{r, message=F, echo=T}
+```{r, message=F}
 library(readr)
 
 # read and name data
 low_birth = read_csv("Module 01/lowbwt_Low.csv")
 norm_birth = read_csv("Module 01/lowbwt_Normal.csv")
 ```
+
+```{r}
+# Check for number of missing values
+sum(is.na(low_birth))
+
+# Examine the classes of each column
+str(low_birth)
+```
+
+## Data manipulation using `dplyr` 
+
+```{r, echo=F}
+library(dplyr)
+```
+
+```{r}
+# Ordering data by variable/column 'id'
+arrange(low_birth, id)
+```
+
+```{r}
+# Arrange by id in descending order
+arrange(low_birth, desc(id))
+```
+
+`case_when` function
+
+```{r}
+# Use case_when function to create new age categories
+# Cat 1: Age < 25; Cat 2: 25 < Age < 30. Cat 3: Age > 30
+mutate(low_birth, new_age = case_when(
+  age < 25 ~ 1, 
+  age >= 25 & age < 30 ~2,
+  age > 30 ~ 3
+))
+```
+
+combine data sets
+
+```{r}
+# stack low_birth & norm_birth
+low_and_norm = rbind(low_birth, norm_birth)
+
+# combine by specific variable
+admin_birth = read_csv("Module 01/lowbwt_Admin.csv")
+birth_final = full_join(admin_birth, low_and_norm, by = "id")
+```
+
+export data by
+`write.csv(birth_final, file = "./birth_final.csv")`
+
 
 
