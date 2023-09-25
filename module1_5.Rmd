@@ -1,0 +1,23 @@
+---
+title: "rcode_memo"
+author: "Yuki Joyama"
+date: "2023-09-25"
+output: github_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = F)
+```
+
+# Module 1
+## Import data
+
+```{r, message=F, echo=T}
+library(readr)
+
+# read and name data
+low_birth = read_csv("Module 01/lowbwt_Low.csv")
+norm_birth = read_csv("Module 01/lowbwt_Normal.csv")
+```
+
+

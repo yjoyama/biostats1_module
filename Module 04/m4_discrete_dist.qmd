@@ -1,0 +1,99 @@
+---
+title: "Discrete Distributions: Binomial & Poisson"
+format: pdf
+---
+
+## Binomial Distriution
+
+Consider a sample of n infants with a 0.06 probability of developing asthma. Calculate the probability that exactly 5 infants develop asthma.
+
+```{r}
+# n = 5
+dbinom(5, 20, 0.06)
+
+# n = 100
+dbinom(5, 100, 0.06)
+```
+
+Now, calculate the probability that at least 10 infants have asthma from a sample of 20.
+
+$$P(X \ge 10) = 1 - P(X \leq 9)$$
+
+```{r}
+1 - pbinom(9, 20, 0.06)
+```
+
+Create a function to graph the binomial distribution with parameters n and p.
+
+```{r}
+# define function
+bin_graph = function(n, p) {
+  
+  x = dbinom(0:n, size = n, prob = p)
+  barplot(x, names.arg = 0:n,
+          main = paste0("n = ", n, ", p = ", p),
+          ylab = "P(x)",
+          xlab = "x")
+  
+}
+
+# call function
+bin_graph(n = 20, p = 0.06)
+bin_graph(n = 100, p = 0.06)
+bin_graph(n = 100, p = 0.5)
+```
+
+
+
+## Poisson Distribution
+
+Let lambda be the rate (number of calls per hour).
+
+Calculate the probability of having exactly 4 calls in the next hour for lambda = 10.
+
+```{r}
+dpois(4, 10)
+```
+
+Calculate the probability of receiving at most 8 calls in one hour.
+
+```{r}
+ppois(8, 10)
+```
+
+What does the Poisson distribution look with with different lambdas?  (Create a function to graph the Poisson distribution with parameter lambda.)
+
+```{r}
+# define function
+poi_graph = function(lam) {
+  
+  x = dpois(0:20, lambda = lam)
+  barplot(x, names.arg = 0:20,
+          ylim = c(0, 0.25),
+          main = paste0("lambda = ", lam),
+          ylab = "P(x)",
+          xlab = "x")
+  
+}
+
+# call function
+poi_graph(lam = 3)
+poi_graph(lam = 5)
+poi_graph(lam = 10)
+```
+
+## Exercise from Slide 26
+
+Assume a rare birth defect occurs with probability 0.0001 and we collect a sample of 4,000 babies. Calculate the probability of having at least 10 babies with a birth defect.
+
+Note: this probability can be computed using either the binomial or Poisson distribution.
+
+```{r}
+# binomial
+1 - pbinom(9, 4000, 0.0001)
+
+# Poisson 
+1 - ppois(9, 0.4)
+```
+
+Both probabilities are approximately 0.

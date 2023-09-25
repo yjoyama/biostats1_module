@@ -1,0 +1,100 @@
+---
+title: "Module 2- Descriptive Statistics"
+format: html
+---
+
+## Descriptive Statistics
+
+```{r}
+#| output: false
+
+library(tidyverse)
+
+# read data
+low_birth <- read.csv("./lowbwt_ALL.csv")
+
+# select relevant variables
+low_birth <- dplyr::select(low_birth, age, race, smoke, bwt)
+
+# change smoking status to a factor
+low_birth <- mutate(low_birth,
+                    smoke = ifelse(smoke == 1, "yes", "no"))
+```
+
+## Numerical Summaries
+
+We recommend the use of the package `{gtsummary}` for descriptive tables.
+
+NOTE: you will need to install the `{gtsummary}` package.  Run `install.packages("gtsummary")` in the Console.
+
+```{r}
+# install and load gtsummary
+# install.packages("gtsummary")
+library(gtsummary)
+
+# create overall summary table
+low_birth %>%  
+  tbl_summary(missing_text = "(Missing)",   # counts missing values
+    statistic = list(all_continuous() ~ "{mean} ({sd})"),  # what to do with continuous variables
+    label = list(age ~ "Age",       # label variables
+                 race ~ "Race",
+                 smoke ~ "Smoking Status",
+                 bwt ~ "Birth Weight")) %>% 
+  bold_labels() %>%   
+  italicize_levels() 
+
+# create summary table by smoking status
+low_birth %>%  
+  tbl_summary(by = "smoke",   # stratify by smoking status
+              missing_text = "(Missing)",
+    statistic = list(all_continuous() ~ "{mean} ({sd})"),
+    label = list(age ~ "Age",
+                 race ~ "Race",
+                 smoke ~ "Smoking Status",
+                 bwt ~ "Birth Weight")) %>% 
+  bold_labels() %>% 
+  italicize_levels() 
+```
+
+## Graphical Summaries
+
+We can also describe this data with plots.  
+
+```{r}
+### bar graph of race using base R
+# first you need to create a summary table
+low_birth_race_summary <-
+  low_birth %>% 
+  group_by(race) %>% 
+  summarise(count = n())
+
+# view summary table
+low_birth_race_summary
+
+# plot the barplot using the summary table
+barplot(height = low_birth_race_summary$count,
+        names = low_birth_race_summary$race)
+
+### bar graph of race using ggplot
+ggplot(low_birth) +
+  geom_bar(aes(x = race))
+
+### histogram of birth weight using base R
+hist(low_birth$bwt,
+     main = "Histogram of Birth Weight",
+     xlab = "Birth Weight (g)")
+
+### histogram of birth weight using ggplot
+ggplot(low_birth) +
+  geom_histogram(aes(x = bwt), bins = 12) + # we can choose an appropriate number of bins
+  labs(title = "Histogram of Birth Weight",
+       x = "Birth Weight (g)")
+
+### boxplot of age using base R
+boxplot(low_birth$age)
+
+### boxplot of age using ggplot
+ggplot(low_birth) +
+  geom_boxplot(aes(y = age))
+```
+
