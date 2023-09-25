@@ -1,8 +1,6 @@
 ---
 title: "Module 1 - Data Maniplulation"
-output:
-  github_document: default
-  html_document: default
+output: github_document
 ---
 
 ## Importing Data
