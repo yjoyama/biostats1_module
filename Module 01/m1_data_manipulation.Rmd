@@ -2,9 +2,7 @@
 title: "Module 1 - Data Maniplulation"
 output: github_document
 ---
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
-```
+
 ## Importing Data
 
 Here we read csv files `lowbwt_Low.csv` and `lowbwt_Normal.csv`
